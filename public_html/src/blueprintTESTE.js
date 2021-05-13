@@ -61,42 +61,42 @@ class Game{
 		pivotPoint = new THREE.Object3D();
 		
 
-		var page1 = new Page(this.scene, 'Ex Ludo Librium 01.');
-	    page1.mesh.rotation.y = THREE.Math.degToRad( 60 );
-		page1.mesh.position.set(0,500,500);
+		// var page1 = new Page(this.scene, 'Ex Ludo Librium 01.');
+	    // page1.mesh.rotation.y = THREE.Math.degToRad( 60 );
+		// page1.mesh.position.set(0,500,500);
 
-		point.add(pivotPoint);
-		pivotPoint.add(page1);
+		// point.add(pivotPoint);
+		// pivotPoint.add(page1);
 				
 		
 
-		var page2 = new Page(this.scene, 'Ex Ludo Librium 02.');
-		page2.mesh.rotation.y = THREE.Math.degToRad( 60 );
-		page2.mesh.position.set(0,500,-500);
+		// var page2 = new Page(this.scene, 'Ex Ludo Librium 02.');
+		// page2.mesh.rotation.y = THREE.Math.degToRad( 60 );
+		// page2.mesh.position.set(0,500,-500);
 
-        var page3 = new Page(this.scene, 'Ex Ludo Librium 03.');
-		page3.mesh.rotation.y = THREE.Math.degToRad( 120 );
-		page3.mesh.position.set(0,500,-500);
+        // var page3 = new Page(this.scene, 'Ex Ludo Librium 03.');
+		// page3.mesh.rotation.y = THREE.Math.degToRad( 120 );
+		// page3.mesh.position.set(0,500,-500);
 
-		var page4 = new Page(this.scene, 'Ex Ludo Librium 04.');
-		page4.mesh.rotation.y = THREE.Math.degToRad( 180 );
-		page4.mesh.position.set(0,500,-500);
+		// var page4 = new Page(this.scene, 'Ex Ludo Librium 04.');
+		// page4.mesh.rotation.y = THREE.Math.degToRad( 180 );
+		// page4.mesh.position.set(0,500,-500);
 
-        var page5 = new Page(this.scene, 'Ex Ludo Librium 05.');
-		page5.mesh.rotation.y = THREE.Math.degToRad( 240 );
-		page5.mesh.position.set(0,500,-500);
+        // var page5 = new Page(this.scene, 'Ex Ludo Librium 05.');
+		// page5.mesh.rotation.y = THREE.Math.degToRad( 240 );
+		// page5.mesh.position.set(0,500,-500);
 
-		var page6 = new Page(this.scene, 'Ex Ludo Librium 06.');
-		page6.mesh.rotation.y = THREE.Math.degToRad( 300 );
-		page6.mesh.position.set(0,500,-500);
+		// var page6 = new Page(this.scene, 'Ex Ludo Librium 06.');
+		// page6.mesh.rotation.y = THREE.Math.degToRad( 300 );
+		// page6.mesh.position.set(0,500,-500);
 
 		
-		$('form').submit(function(){
-			const msg = $('#m').val();
-			game.page.update(msg);
-		  	$('#m').val('');
-		  	return false;
-		});
+		// $('form').submit(function(){
+		// 	const msg = $('#m').val();
+		// 	game.page.update(msg);
+		//   	$('#m').val('');
+		//   	return false;
+		// });
 		
 	
 		// const explanet = new Explanet();
@@ -164,11 +164,6 @@ class Game{
             
             game.loadNextAnim(loader);
 		} );
-
-
-
-		
-
 		
 		this.renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
 		this.renderer.setPixelRatio( window.devicePixelRatio );
@@ -203,59 +198,92 @@ class Game{
     createColliders(){
 		
 		const t = this.scene
-        const geometry = new THREE.BoxGeometry(500, 400, 500);
-        const material = new THREE.MeshBasicMaterial({color:0x222222, wireframe:true});
-
+		
+        // const geometry = new THREE.BoxGeometry(500, 400, 500);
+       const material = new THREE.MeshBasicMaterial({color:0x222222, wireframe:true});
 	   const collider = this.colliders = [];
         
-		const loaderr = new THREE.STLLoader();
+		// const loaderr = new THREE.STLLoader();
 
         for (let x=-5000; x<5000; x+=1000){
             for (let z=-5000; z<5000; z+=1000){
+
                 if (x==0 && z==0) continue;
-				loaderr.load( `${this.assetsPath}files/Farm.stl`, function ( geometryy ) {
-					const materiall = new THREE.MeshPhongMaterial( { color: 0xff5533, specular: 0x111111, shininess: 200 } );
-					const farm = new THREE.Mesh( geometryy, materiall );
-					farm.scale.set( 10, 10, 10 );
-					farm.rotation.x = - Math.PI /2
-					farm.castShadow = true;
-					farm.receiveShadow = true;
-		
-                farm.position.set(x, 0, z);
-                t.add(farm);
-                collider.push(farm);
+
+				const tLoader = new THREE.TextureLoader();
+                const loader = new THREE.FBXLoader();
+				const group = new THREE.Group()
+				const groupA = new THREE.Group()
+			
+            loader.load( `assets/files/PolygonMini_Fantasy/Models/SM_Tile_Hex_Flat_05.fbx`, function ( hex ) { 
+					hex.traverse( function ( child ) {
+						if ( child.isMesh ) {
+							child.castShadow = true;
+							child.receiveShadow = true;
+						}
+						
+					});
+				
+                    tLoader.load(`assets/files/PolygonMini_Fantasy/Textures/PolygonMinis_Texture_01_Blue.png`, function(hexTexture){
+                        hex.traverse( function ( child ) {
+                            if ( child.isMesh ){
+                                child.material.map = hexTexture; 
+                            }
+							group.add(child)  
+							groupA.add(child) 
+							collider.push(child)
+                        });
+                    });   
+				});
+
+
+				loader.load( `assets/files/PolygonMini_Fantasy/Models/SM_Tile_Hex_Forest_01.fbx`, function ( forest ) { 
+				
+					forest.traverse( function ( child ) {
+						if ( child.isMesh ) {
+							child.castShadow = true;
+							child.receiveShadow = true;	
+						}
+					});
+					
+                    tLoader.load(`assets/files/PolygonMini_Fantasy/Textures/PolygonMinis_Texture_01_Green.png`, function(forestTexture){
+                        forest.traverse( function ( child ) {
+                            if ( child.isMesh ){
+                                child.material.map = forestTexture; 
+                            }
+							groupA.add(child)  
+							collider.push(child)
+                        });
+                    });   
 				});
                 
-            loaderr.load( `${this.assetsPath}files/Cave.stl`, function ( geometryyy ) {
-					const materialll = new THREE.MeshPhongMaterial( { color: 0xff5533, specular: 0x111111, shininess: 200 } );
-					const cave = new THREE.Mesh( geometryyy, materialll );
-					cave.scale.set( 10, 10, 10 );
-					cave.rotation.x = - Math.PI /2
-					cave.castShadow = true;
-					cave.receiveShadow = true;
-		
-                cave.position.set(x, 0, z);
-                t.add(cave);
-                collider.push(cave)	
-            			});
-
-            loaderr.load( `${this.assetsPath}files/Forest_-_Bigger.stl`, function ( hexForest ) {
-                    const materialHexForest = new THREE.MeshPhongMaterial( { color: 0xff5533, specular: 0x111111, shininess: 200 } );
-                    const forest = new THREE.Mesh( hexForest, materialHexForest );
-                    forest.scale.set( 10, 10, 10 );
-                    forest.rotation.x = - Math.PI /2
-                    forest.castShadow = true;
-                    forest.receiveShadow = true;
-                
-                forest.position.set(x, 0, z);
-                t.add(forest);
-                collider.push(forest);
+				loader.load( `${this.assetsPath}files/PolygonMini_Fantasy/Models/SM_Tile_Hex_Mountain_03.fbx`, function ( object ) { 
+					object.traverse( function ( child ) {
+						if ( child.isMesh ) {
+							child.castShadow = true;
+							child.receiveShadow = true;
+						}
+					});
+                    tLoader.load(`assets/files/PolygonMini_Fantasy/Textures/PolygonMinis_Texture_01_Green.png`, function(texture){
+                        object.traverse( function ( child ) { 
+                            if ( child.isMesh ){
+                                child.material.map = texture;
+                            }
+							group.add(child) 
+							collider.push(child)
                         });
-                
+                    });   
+				});
+
+				group.position.set(x,0,z)
+				groupA.position.set(x,0,z)
+				t.add(groupA)
+				t.add(group)
+			
             }
         }
-       
-        
+		
+        			
         const geometry2 = new THREE.BoxGeometry(1000, 40, 1000);
         const stage = new THREE.Mesh(geometry2, material);
         stage.position.set(0, 20, 0);

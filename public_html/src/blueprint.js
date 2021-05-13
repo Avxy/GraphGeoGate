@@ -203,15 +203,15 @@ class Game{
     createColliders(){
 		
 		const t = this.scene
-        const geometry = new THREE.BoxGeometry(500, 400, 500);
+        // const geometry = new THREE.BoxGeometry(500, 400, 500);
         const material = new THREE.MeshBasicMaterial({color:0x222222, wireframe:true});
 
 	   const collider = this.colliders = [];
         
 		const loaderr = new THREE.STLLoader();
 
-        for (let x=-5000; x<5000; x+=1000){
-            for (let z=-5000; z<5000; z+=1000){
+        for (let x=-1000; x<1000; x+=500){
+            for (let z=-1000; z<1000; z+=500){
                 if (x==0 && z==0) continue;
 				loaderr.load( `${this.assetsPath}files/Farm.stl`, function ( geometryy ) {
 					const materiall = new THREE.MeshPhongMaterial( { color: 0xff5533, specular: 0x111111, shininess: 200 } );
@@ -239,18 +239,20 @@ class Game{
                 collider.push(cave)	
             			});
 
-            loaderr.load( `${this.assetsPath}files/Forest_-_Bigger.stl`, function ( hexForest ) {
-                    const materialHexForest = new THREE.MeshPhongMaterial( { color: 0xff5533, specular: 0x111111, shininess: 200 } );
-                    const forest = new THREE.Mesh( hexForest, materialHexForest );
-                    forest.scale.set( 10, 10, 10 );
-                    forest.rotation.x = - Math.PI /2
-                    forest.castShadow = true;
-                    forest.receiveShadow = true;
-                
-                forest.position.set(x, 0, z);
-                t.add(forest);
-                collider.push(forest);
-                        });
+            //   
+
+						loaderr.load( `${this.assetsPath}files/Mountain.stl`, function ( hexMountain ) {
+							const materialHexMountain = new THREE.MeshPhongMaterial( { color: 0xff5533, specular: 0x111111, shininess: 200 } );
+							const mountain = new THREE.Mesh( hexMountain, materialHexMountain );
+							mountain.scale.set( 10, 10, 10 );
+							mountain.rotation.x = - Math.PI /2
+							mountain.castShadow = true;
+							mountain.receiveShadow = true;
+						
+						mountain.position.set(x, 0, z);
+						t.add(mountain);
+						collider.push(mountain);
+								});			
                 
             }
         }
